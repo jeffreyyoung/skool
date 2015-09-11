@@ -98,6 +98,7 @@ static void keyboard_isr()
 	{
 		switch (inChar)
 		{
+            
 			case '\r':
 			case '\n':
 			{
@@ -105,7 +106,7 @@ static void keyboard_isr()
 				semSignal(inBufferReady);	// SIGNAL(inBufferReady)
 				break;
 			}
-
+                
 			case 0x18:						// ^x
 			{
 				inBufIndx = 0;
@@ -119,7 +120,7 @@ static void keyboard_isr()
 			{
 				inBuffer[inBufIndx++] = inChar;
 				inBuffer[inBufIndx] = 0;
-				printf("%c", inChar);		// echo character
+				//printf("%c", inChar);		// echo character
 			}
 		}
 	}

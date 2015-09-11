@@ -113,10 +113,14 @@ int P1_shellTask(int argc, char* argv[])
 			// parse input string
 			while ((sp = strchr(sp, ' ')))
 			{
+                printf("%s\n", sp);
+                
 				*sp++ = 0;
 				myArgv[newArgc++] = sp;
 			}
 			newArgv = myArgv;
+            //malloc
+            
 		}	// ?? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 		// look for command
@@ -137,6 +141,8 @@ int P1_shellTask(int argc, char* argv[])
 		// ?? free up any malloc'd argv parameters
 		for (i=0; i<INBUF_SIZE; i++) inBuffer[i] = 0;
 	}
+    
+    //free everything
 	return 0;						// terminate task
 } // end P1_shellTask
 

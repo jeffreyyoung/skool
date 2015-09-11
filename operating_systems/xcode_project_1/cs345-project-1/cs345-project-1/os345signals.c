@@ -43,6 +43,8 @@ int signals(void)
 			tcb[curTask].signal &= ~mySIGINT;
 			(*tcb[curTask].sigIntHandler)();
 		}
+        
+        
 	}
 	return 0;
 }
