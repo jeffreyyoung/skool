@@ -96,7 +96,7 @@ static void keyboard_isr()
 	semSignal(charReady);					// SIGNAL(charReady) (No Swap)
 	if (charFlag == 0)
 	{
-		switch (inChar)
+        switch (inChar)
 		{
             
 			case '\r':
@@ -106,7 +106,20 @@ static void keyboard_isr()
 				semSignal(inBufferReady);	// SIGNAL(inBufferReady)
 				break;
 			}
+            
+            //handle back space
+            case '\x7f':
+            {
+                if (inBufIndx != 0)
+                {
+                    printf("\b \b");
+                    inBuffer[--inBufIndx] = '\0';
+                }
                 
+                break;
+                
+            }
+            
 			case 0x18:						// ^x
 			{
 				inBufIndx = 0;
@@ -120,7 +133,7 @@ static void keyboard_isr()
 			{
 				inBuffer[inBufIndx++] = inChar;
 				inBuffer[inBufIndx] = 0;
-				//printf("%c", inChar);		// echo character
+				printf("%c", inChar);		// echo character
 			}
 		}
 	}

@@ -32,7 +32,7 @@ extern jmp_buf reset_context;
 // -----
 
 
-#define NUM_COMMANDS 49
+#define NUM_COMMANDS 51
 typedef struct								// command struct
 {
 	char* command;
@@ -50,7 +50,6 @@ extern Semaphore* inBufferReady;		// input buffer ready semaphore
 extern bool diskMounted;				// disk has been mounted
 extern char dirPath[];					// directory path
 Command** commands;						// shell commands
-
 
 // ***********************************************************************
 // project 1 prototypes
@@ -113,13 +112,15 @@ int P1_shellTask(int argc, char* argv[])
 			// parse input string
 			while ((sp = strchr(sp, ' ')))
 			{
-                printf("%s\n", sp);
-                
 				*sp++ = 0;
 				myArgv[newArgc++] = sp;
 			}
 			newArgv = myArgv;
             //malloc
+//            for (int i = 0; i < sizeof(newArgv); i++)
+//            {
+//                printf("here!!!!");
+//            }
             
 		}	// ?? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -183,6 +184,41 @@ int P1_quit(int argc, char* argv[])
 } // end P1_quit
 
 
+// ***********************************************************************
+// ***********************************************************************
+// quit command
+//
+int P1_args(int argc, char* argv[])
+{
+    for (int i = 0; i < argc; i++)
+    {
+        printf("\n%s", argv[i]);
+    }
+    
+    return 0;
+} // end P1_quit
+
+// ***********************************************************************
+// ***********************************************************************
+// add command
+//
+int P1_add(int argc, char* argv[])
+{
+    int sum = 0;
+    
+    for (int i = 0; i < argc; i++)
+    {
+        //handle hex string
+        //const char *hexstring = "0xabcdef0";
+        //int number = (int)strtol(hexstring, NULL, 0);
+        
+        sum = sum + atoi(argv[i]);
+    }
+    
+    printf("\nsum: %d", sum);
+    
+    return 0;
+} // end P1_quit
 
 // **************************************************************************
 // **************************************************************************
@@ -252,12 +288,14 @@ Command** P1_init()
 	commands[i++] = newCommand("quit", "q", P1_quit, "Quit");
 	commands[i++] = newCommand("kill", "kt", P2_killTask, "Kill task");
 	commands[i++] = newCommand("reset", "rs", P2_reset, "Reset system");
-
+    
 	// P1: Shell
 	commands[i++] = newCommand("project1", "p1", P1_project1, "P1: Shell");
 	commands[i++] = newCommand("help", "he", P1_help, "OS345 Help");
 	commands[i++] = newCommand("lc3", "lc3", P1_lc3, "Execute LC3 program");
-
+    commands[i++] = newCommand("args", "args", P1_args, "List arguments");
+    commands[i++] = newCommand("add", "add", P1_add, "Adds arguments");
+    
 	// P2: Tasking
 	commands[i++] = newCommand("project2", "p2", P2_project2, "P2: Tasking");
 	commands[i++] = newCommand("semaphores", "sem", P2_listSems, "List semaphores");
