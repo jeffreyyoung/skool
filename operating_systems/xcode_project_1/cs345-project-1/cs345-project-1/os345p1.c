@@ -41,6 +41,13 @@ typedef struct								// command struct
 	char* description;
 } Command;
 
+typedef enum
+{
+    DEFAULT,
+    IN_QUOTE,
+    IN_WORD
+} parse_state;
+
 // ***********************************************************************
 // project 1 variables
 //
@@ -50,6 +57,7 @@ extern Semaphore* inBufferReady;		// input buffer ready semaphore
 extern bool diskMounted;				// disk has been mounted
 extern char dirPath[];					// directory path
 Command** commands;						// shell commands
+extern int curTask;
 
 // ***********************************************************************
 // project 1 prototypes
@@ -58,7 +66,38 @@ Command* newCommand(char*, char*, int (*func)(int, char**), char*);
 
 void mySigIntHandler()
 {
-	printf("Hellomynameisinigomontoyayoukilledmyfatherpreparetodie");
+    //printf("Hellomynameisinigomontoyayoukilledmyfatherpreparetodie");
+    sigSignal(-1, mySIGTERM);
+}
+
+void mySigContHandler()
+{
+    return;
+}
+
+void mySigTermHandler()
+{
+    killTask(curTask);
+}
+
+void mySigTstpHandler()
+{
+    sigSignal(-1, mySIGSTOP);
+}
+
+
+
+bool indexOfQuotation(char* s)
+{
+    for(int i = 0; i < strlen(s); i++)
+    {
+        if (s[i] == '"')
+        {
+            return i;
+        }
+    }
+    
+    return -1;
 }
 
 // ***********************************************************************
@@ -104,23 +143,114 @@ int P1_shellTask(int argc, char* argv[])
 			static char *sp, *myArgv[MAX_ARGS];
 
 			// init arguments
-			newArgc = 1;
-			myArgv[0] = sp = inBuffer;				// point to input string
-			for (i=1; i<MAX_ARGS; i++)
+			newArgc = 0;
+			//myArgv[0] = sp = inBuffer;				// point to input string
+            inBuffer[strlen(inBuffer)] = ' ';
+            inBuffer[strlen(inBuffer)] = '\0';
+            
+            sp = inBuffer;
+			for (i=0; i<MAX_ARGS; i++)
 				myArgv[i] = 0;
-
-			// parse input string
-			while ((sp = strchr(sp, ' ')))
-			{
-				*sp++ = 0;
-				myArgv[newArgc++] = sp;
-			}
-			newArgv = myArgv;
+            
+            parse_state s = DEFAULT;
+            int i = 0;
+            char currentWord[256] = "";
+            while (i < strlen(sp))
+            {
+                char currentCharacter = sp[i];
+                switch (s)
+                {
+                    case DEFAULT:
+                        if (currentCharacter == ' ')
+                        {
+                            //skip character
+                        }
+                        else if (currentCharacter == '"')
+                        {
+                            //add character to string
+                            currentWord[strlen(currentWord)] = currentCharacter;
+                            currentWord[strlen(currentWord)] = '\0';
+                            s = IN_QUOTE;
+                        }
+                        else
+                        {
+                            //add character to string
+                            currentWord[strlen(currentWord)] = currentCharacter;
+                            currentWord[strlen(currentWord)] = '\0';
+                            s = IN_WORD;
+                        }
+                        break;
+                    case IN_QUOTE:
+                        //add character to string
+                        currentWord[strlen(currentWord)] = currentCharacter;
+                        currentWord[strlen(currentWord)] = '\0';
+                        if (currentCharacter == '"')
+                        {
+                            //add current Word to myArgv
+                            char* copy = strdup(currentWord);
+                            myArgv[newArgc++] = copy;
+                            //clear current word
+                            memset(&currentWord[0], 0, sizeof(currentWord));
+                            s = DEFAULT;
+                        }
+                        else
+                        {
+                            //do nothing
+                        }
+                        break;
+                    case IN_WORD:
+                        if (currentCharacter == '"')
+                        {
+                            //add current Word to myArgv
+                            char* copy = strdup(currentWord);
+                            myArgv[newArgc++] = copy;
+                            memset(&currentWord[0], 0, sizeof(currentWord));
+                            
+                            currentWord[strlen(currentWord)] = currentCharacter;
+                            currentWord[strlen(currentWord)] = '\0';
+                            s = IN_QUOTE;
+                        }
+                        else if (currentCharacter == ' ')
+                        {
+                            //add current Word to myArgv
+                            char* copy = strdup(currentWord);
+                            myArgv[newArgc++] = copy;
+                            memset(&currentWord[0], 0, sizeof(currentWord));
+                            s = DEFAULT;
+                        }
+                        else
+                        {
+                            currentWord[strlen(currentWord)] = currentCharacter;
+                            currentWord[strlen(currentWord)] = '\0';
+                        }
+                        break;
+                }
+//                //add character to string
+//                currentWord[strlen(currentWord)] = currentCharacter;
+//                currentWord[strlen(currentWord)] = '\0';
+//                
+//                //add current Word to myArgv
+//                char* copy = strdup(currentWord);
+//                myArgv[newArgc++] = copy;
+                
+                //next char pointer
+                i++;
+            }
+            
+//			// parse input string
+//			while ((sp = strchr(sp, ' ')))
+//			{
+//				*sp++ = 0;
+//				myArgv[newArgc++] = sp;
+//			}
+            
+            newArgv = (char**)malloc(sizeof(char*) * newArgc);
             //malloc
-//            for (int i = 0; i < sizeof(newArgv); i++)
-//            {
-//                printf("here!!!!");
-//            }
+            for (int i = 0; i < newArgc; i++)
+            {
+                newArgv[i] = malloc((strlen(myArgv[i])));
+                strcpy(newArgv[i], myArgv[i]);
+            }
             
 		}	// ?? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -144,6 +274,13 @@ int P1_shellTask(int argc, char* argv[])
 	}
     
     //free everything
+    for(i = 0; i < MAX_ARGS; i++)
+    {
+        newArgv[i] = 0;
+        free(newArgv[i]);
+    }
+    free(newArgv);
+    
 	return 0;						// terminate task
 } // end P1_shellTask
 
@@ -208,17 +345,27 @@ int P1_add(int argc, char* argv[])
     
     for (int i = 0; i < argc; i++)
     {
-        //handle hex string
-        //const char *hexstring = "0xabcdef0";
-        //int number = (int)strtol(hexstring, NULL, 0);
+        int number = 0;
         
-        sum = sum + atoi(argv[i]);
+        char* numberString = argv[i];
+        
+        if (numberString[0] == '0' && numberString[1] == 'x')
+        {
+            number = (int)strtol(numberString, NULL, 0);
+        }
+        else
+        {
+            number = atoi(numberString);
+        }
+        
+        sum = sum + number;
     }
     
     printf("\nsum: %d", sum);
     
     return 0;
-} // end P1_quit
+} // end P1_help
+
 
 // **************************************************************************
 // **************************************************************************

@@ -73,7 +73,7 @@ long swapCount;						// number of re-schedule cycles
 char inChar;						// last entered character
 int charFlag;						// 0 => buffered input
 int inBufIndx;						// input pointer into input buffer
-char inBuffer[INBUF_SIZE+1];		// character input buffer
+char inBuffer[INBUF_SIZE+2];		// character input buffer
 //Message messages[NUM_MESSAGES];		// process message buffers
 
 int pollClock;						// current clock()

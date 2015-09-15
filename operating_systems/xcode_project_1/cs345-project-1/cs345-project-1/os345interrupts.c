@@ -60,6 +60,10 @@ extern int lastPollClock;			// last pollClock
 
 extern int superMode;						// system mode
 
+extern TCB tcb[];
+
+#define NUM_COMMANDS 52
+
 
 // **********************************************************************
 // **********************************************************************
@@ -107,8 +111,7 @@ static void keyboard_isr()
 				break;
 			}
             
-            //handle back space
-            case '\x7f':
+            case '\x7f':                    // Backspace
             {
                 if (inBufIndx != 0)
                 {
@@ -125,9 +128,37 @@ static void keyboard_isr()
 				inBufIndx = 0;
 				inBuffer[0] = 0;
 				sigSignal(0, mySIGINT);		// interrupt task 0
+                killTask(-1);
 				semSignal(inBufferReady);	// SEM_SIGNAL(inBufferReady)
 				break;
 			}
+                
+            case 0x17:                      // ^w
+            {
+                printf("\nPausing\n");
+                sigSignal(-1, mySIGSTOP);
+                break;
+            }
+                
+            case 0x12:						// ^r
+            {
+                sigSignal(-1, mySIGCONT);
+                int i = 0;
+                for(i = 0; i < NUM_COMMANDS; i++)
+                {
+                    if(tcb[i].signal & mySIGTSTP)
+                    {
+                        tcb[i].signal &= ~mySIGTSTP;
+                    }
+                    if(tcb[i].signal & mySIGSTOP)
+                    {
+                        tcb[i].signal &= ~mySIGSTOP;
+                    }
+                }
+                printf("\nUnpausing\n");
+                break;
+            }
+
 
 			default:
 			{
