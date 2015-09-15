@@ -144,7 +144,6 @@ int P1_shellTask(int argc, char* argv[])
 
 			// init arguments
 			newArgc = 0;
-			//myArgv[0] = sp = inBuffer;				// point to input string
             inBuffer[strlen(inBuffer)] = ' ';
             inBuffer[strlen(inBuffer)] = '\0';
             
@@ -225,24 +224,8 @@ int P1_shellTask(int argc, char* argv[])
                         }
                         break;
                 }
-//                //add character to string
-//                currentWord[strlen(currentWord)] = currentCharacter;
-//                currentWord[strlen(currentWord)] = '\0';
-//                
-//                //add current Word to myArgv
-//                char* copy = strdup(currentWord);
-//                myArgv[newArgc++] = copy;
-                
-                //next char pointer
                 i++;
             }
-            
-//			// parse input string
-//			while ((sp = strchr(sp, ' ')))
-//			{
-//				*sp++ = 0;
-//				myArgv[newArgc++] = sp;
-//			}
             
             newArgv = (char**)malloc(sizeof(char*) * newArgc);
             //malloc
@@ -252,18 +235,33 @@ int P1_shellTask(int argc, char* argv[])
                 strcpy(newArgv[i], myArgv[i]);
             }
             
+            
+            //if last character of last token is '&' create background task
 		}	// ?? >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
+        
+        bool runInBackground = 0;
+        char * lastArg = newArgv[newArgc - 1];
+        runInBackground = (lastArg && *lastArg && lastArg[strlen(lastArg) - 1] == '&');
+        
 		// look for command
 		for (found = i = 0; i < NUM_COMMANDS; i++)
 		{
 			if (!strcmp(newArgv[0], commands[i]->command) ||
 				 !strcmp(newArgv[0], commands[i]->shortcut))
 			{
-				// command found
-				int retValue = (*commands[i]->func)(newArgc, newArgv);
-				if (retValue) printf("\nCommand Error %d", retValue);
-				found = TRUE;
+                found = TRUE;
+                
+                if (runInBackground)
+                {
+                    printf("\ncreating background task...\n");
+                    createTask(newArgv[0], (*commands[i]->func), 10, newArgc, newArgv);
+                }
+                else
+                {
+                    int retValue = (*commands[i]->func)(newArgc, newArgv);
+                    if (retValue) printf("\nCommand Error %d", retValue);
+                }
+
 				break;
 			}
 		}
@@ -329,7 +327,7 @@ int P1_args(int argc, char* argv[])
 {
     for (int i = 0; i < argc; i++)
     {
-        printf("\n%s", argv[i]);
+        printf("    \n%s", argv[i]);
     }
     
     return 0;

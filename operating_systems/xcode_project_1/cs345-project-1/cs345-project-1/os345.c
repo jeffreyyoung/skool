@@ -124,8 +124,7 @@ int main(int argc, char* argv[])
 
 	// output header message
 	printf("%s", STARTUP_MSG);
-    printf("\n%s", "yahooo");
-	// initalize OS
+    // initalize OS
 	if ( resetCode = initOS()) return resetCode;
 
 	// create global/system semaphores here
