@@ -77,6 +77,7 @@ void mySigContHandler()
 
 void mySigTermHandler()
 {
+    printf("test");
     killTask(curTask);
 }
 
@@ -160,6 +161,7 @@ int P1_shellTask(int argc, char* argv[])
                 switch (s)
                 {
                     case DEFAULT:
+                        s = tolower(s);
                         if (currentCharacter == ' ')
                         {
                             //skip character
@@ -167,8 +169,8 @@ int P1_shellTask(int argc, char* argv[])
                         else if (currentCharacter == '"')
                         {
                             //add character to string
-                            currentWord[strlen(currentWord)] = currentCharacter;
-                            currentWord[strlen(currentWord)] = '\0';
+                            //currentWord[strlen(currentWord)] = currentCharacter;
+                            //currentWord[strlen(currentWord)] = '\0';
                             s = IN_QUOTE;
                         }
                         else
@@ -181,8 +183,7 @@ int P1_shellTask(int argc, char* argv[])
                         break;
                     case IN_QUOTE:
                         //add character to string
-                        currentWord[strlen(currentWord)] = currentCharacter;
-                        currentWord[strlen(currentWord)] = '\0';
+                        
                         if (currentCharacter == '"')
                         {
                             //add current Word to myArgv
@@ -195,6 +196,8 @@ int P1_shellTask(int argc, char* argv[])
                         else
                         {
                             //do nothing
+                            currentWord[strlen(currentWord)] = currentCharacter;
+                            currentWord[strlen(currentWord)] = '\0';
                         }
                         break;
                     case IN_WORD:
@@ -226,7 +229,10 @@ int P1_shellTask(int argc, char* argv[])
                 }
                 i++;
             }
-            
+            if (strlen(currentWord) > 0)
+            {
+                myArgv[newArgc++] = strdup(currentWord);
+            }
             newArgv = (char**)malloc(sizeof(char*) * newArgc);
             //malloc
             for (int i = 0; i < newArgc; i++)

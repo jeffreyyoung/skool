@@ -49,7 +49,7 @@ extern Semaphore* tics10thsec;				// 1/10 second semaphore
 extern char inChar;				// last entered character
 extern int charFlag;				// 0 => buffered input
 extern int inBufIndx;				// input pointer into input buffer
-extern char inBuffer[INBUF_SIZE+1];	// character input buffer
+extern char inBuffer[INBUF_SIZE+3];	// character input buffer
 
 extern time_t oldTime1;					// old 1sec time
 extern clock_t myClkTime;
@@ -73,7 +73,7 @@ void pollInterrupts(void)
 {
 	// check for task monopoly
 	pollClock = clock();
-	assert("Timeout" && ((pollClock - lastPollClock) < MAX_CYCLES));
+    assert("Timeout" && ((pollClock - lastPollClock) < MAX_CYCLES));
 	lastPollClock = pollClock;
 
 	// check for keyboard interrupt
@@ -127,8 +127,9 @@ static void keyboard_isr()
 			{
 				inBufIndx = 0;
 				inBuffer[0] = 0;
-				sigSignal(0, mySIGINT);		// interrupt task 0
-                killTask(-1);
+				sigSignal(-1, mySIGINT);
+                // interrupt task 0
+                // killTask(-1);
 				semSignal(inBufferReady);	// SEM_SIGNAL(inBufferReady)
 				break;
 			}
@@ -162,9 +163,12 @@ static void keyboard_isr()
 
 			default:
 			{
-				inBuffer[inBufIndx++] = inChar;
-				inBuffer[inBufIndx] = 0;
-				printf("%c", inChar);		// echo character
+                if (inBufIndx < INBUF_SIZE)
+                {
+                    inBuffer[inBufIndx++] = inChar;
+                    inBuffer[inBufIndx] = 0;
+                    printf("%c", inChar);		// echo character
+                }
 			}
 		}
 	}

@@ -62,6 +62,12 @@ int signals(void)
             (*tcb[curTask].sigContHandler)();
         }
         
+        if(tcb[curTask].signal & mySIGTERM)
+        {
+            tcb[curTask].signal &= ~mySIGTERM;
+            (*tcb[curTask].sigTermHandler)();
+        }
+        
 	}
 	return 0;
 }
@@ -137,6 +143,7 @@ int sigSignal(int taskId, int sig)
 void defaultSigIntHandler(void)			// task mySIGINT handler
 {
 	printf("\ndefaultSigIntHandler");
+    sigSignal(-1, mySIGTERM);
 	return;
 }
 
@@ -149,33 +156,57 @@ void defaultSigContHandler(void)
 void defaultSigTstpHandler(void)
 {
     printf("\ndefaultSigTstpHandler");
+    sigSignal(-1, mySIGSTOP);
     return;
 }
 
 void defaultSigTermHandler(void)
 {
     printf("\ndefaultSigTermHandler");
+    killTask(curTask);
     return;
 }
+//
+//void mySigIntHandler()
+//{
+//    //printf("Hellomynameisinigomontoyayoukilledmyfatherpreparetodie");
+//    sigSignal(-1, mySIGTERM);
+//}
+//
+//void mySigContHandler()
+//{
+//    return;
+//}
+//
+//void mySigTermHandler()
+//{
+//    printf("test");
+//    killTask(curTask);
+//}
+//
+//void mySigTstpHandler()
+//{
+//    sigSignal(-1, mySIGSTOP);
+//}
 
 
 void createTaskSigHandlers(int tid)
 {
 	tcb[tid].signal = 0;
-    if (tid)
-    {
+    //if (tid)
+    //{
         // inherit parent signal handlers
-        tcb[tid].sigIntHandler = tcb[curTask].sigIntHandler;			// mySIGINT handler
-        tcb[tid].sigTstpHandler = tcb[curTask].sigTstpHandler;
-        tcb[tid].sigContHandler = tcb[curTask].sigContHandler;
-        tcb[tid].sigTermHandler = tcb[curTask].sigTermHandler;
-    }
-    else
-    {
+//        tcb[tid].sigIntHandler = tcb[curTask].sigIntHandler;			// mySIGINT handler
+//        tcb[tid].sigTstpHandler = tcb[curTask].sigTstpHandler;
+//        tcb[tid].sigContHandler = tcb[curTask].sigContHandler;
+//        tcb[tid].sigTermHandler = tcb[curTask].sigTermHandler;
+    //}
+    //else
+    //{
         // otherwise use defaults
         tcb[tid].sigIntHandler = defaultSigIntHandler;			// task mySIGINT handler
         tcb[tid].sigTstpHandler = defaultSigTstpHandler;
         tcb[tid].sigContHandler = defaultSigContHandler;
         tcb[tid].sigTermHandler = defaultSigTermHandler;
-    }
+    //}
 }
