@@ -161,7 +161,7 @@ int P1_shellTask(int argc, char* argv[])
                 switch (s)
                 {
                     case DEFAULT:
-                        s = tolower(s);
+                        currentCharacter = tolower(currentCharacter);
                         if (currentCharacter == ' ')
                         {
                             //skip character
@@ -201,6 +201,7 @@ int P1_shellTask(int argc, char* argv[])
                         }
                         break;
                     case IN_WORD:
+                        currentCharacter = tolower(currentCharacter);
                         if (currentCharacter == '"')
                         {
                             //add current Word to myArgv
