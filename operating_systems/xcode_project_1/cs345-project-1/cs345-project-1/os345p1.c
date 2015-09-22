@@ -230,7 +230,7 @@ int P1_shellTask(int argc, char* argv[])
                 }
                 i++;
             }
-            if (strlen(currentWord) > 0)
+            if (strlen(currentWord) > 0 || newArgc == 0)
             {
                 myArgv[newArgc++] = strdup(currentWord);
             }
