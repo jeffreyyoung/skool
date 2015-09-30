@@ -19,7 +19,7 @@ def greedy_motif_enumeration(dna, k, t):
 			for i in range( len(kmer) ):
 				nucleotide = kmer[i];
 				counts[nucleotide][i] += 1;
-				profile[nucleotide][i] = float(counts[nucleotide][i] / len(kmers))
+				profile[nucleotide][i] = float(counts[nucleotide][i] / float(len(kmers)))
 
 		return profile;
 
@@ -57,15 +57,16 @@ def greedy_motif_enumeration(dna, k, t):
 				counts[motif[pos]] += 1
 			greatest_value = -1;
 			base = None;
-			for key, value in counts:
+			for key, value in counts.iteritems():
 				if greatest_value < value:
 					base = key;
-			most_frequent_bases[pos] = key
+					greatest_value = value
+			most_frequent_bases[pos] = base
 
 		score = 0;
 		for motif in motifs:
 			for i in range( len(motif) ):
-				if motif[1] != most_frequent_bases[i]:
+				if motif[i] != most_frequent_bases[i]:
 					score += 1;
 		return score;
 
@@ -76,9 +77,7 @@ def greedy_motif_enumeration(dna, k, t):
 			kmers.append( line[i : i + k] )
 		return kmers;
 
-	best_motifs = [];
-	for line in dna:
-		best_motifs.append( get_kmers(line, k)[0] );
+	best_motifs = [string[:k] for string in dna]
 	
 	for kmer in get_kmers(dna[0], k):
 		motifs = [kmer]
@@ -87,12 +86,13 @@ def greedy_motif_enumeration(dna, k, t):
 			profile = build_profile(motifs)
 			profile_most_probable_kmer = get_most_probable_kmer(line, profile);
 			motifs.append(profile_most_probable_kmer)
-			print motifs	
 			
-		if score(motifs) > score(best_motifs):
+		if score(motifs) < score(best_motifs):
 			best_motifs = motifs;
 
 	return best_motifs;
+
+
 
 if __name__ == "__main__":
 	with open( sys.argv[ 1 ] ) as fh:
@@ -102,62 +102,4 @@ if __name__ == "__main__":
 		for line in fh:
 			dna.append(line.strip())
 
-	print greedy_motif_enumeration(dna, k, d)
-
-
-		#get most frequent base at each position
-		#0, 1, 2
-
-		#count mismatches at each position
-
-		#return count
-		# chose most frequent letter in each position
-		#score for [GGC, AAG, CAA, CAC, CAA] is 6
-
-
-	best_motifs = [] #first kmers in each line of dna
-					 #[GGC, AAG, CAA, CAC, CAA]
-
-			#make profile from motifs
-
-
-#loop on kmers in first line
-	#loop on lines in dna starting at second
-
-
-####################
-#for each kmer in first dna line;
-    #profile 
-    #for each line in dna
-    	#get_most_probable_kmer(line, profile)
-
-
-
-
-
-#psuedo counts notes
- #rawr rawr
-
-
-
-
-# possiblePatterns = {}
-# finalPatterns = set()
-
-# for line in dna:
-# 	linePatterns = set())
-# 	for i in range(0, len(line) -k + 1):
-# 		for kmer in mutations(line[i : i +k], d):
-# 			linePatterns.add(kmer)
-
-# 	for p in linePatterns:
-# 		if p in possiblePatterns:
-# 			possiblePatterns[p] += 1
-# 		else:
-# 			possiblePatterns[p] = 1
-
-# for key, val in possiblePatterns.iteritems():
-# 	if val >= len(dna):
-# 		finalPatterns.add(key)
-
-# print " ".join(finalPatterns);
+	print "\n".join(greedy_motif_enumeration(dna, k, d))
