@@ -24,6 +24,7 @@
 #include <time.h>
 #include "os345.h"
 #include "os345signals.h"
+#include "os345queue.h"
 
 #define my_printf	printf
 
@@ -31,18 +32,20 @@
 // project 2 variables
 static Semaphore* s1Sem;					// task 1 semaphore
 static Semaphore* s2Sem;					// task 2 semaphore
+extern Semaphore* tics10sec;
 
 extern TCB tcb[];								// task control block
 extern int curTask;							// current task #
 extern Semaphore* semaphoreList;			// linked list of active semaphores
 extern jmp_buf reset_context;				// context of kernel stack
+extern PQueue* rq;
 
 // ***********************************************************************
 // project 2 functions and tasks
 
 int signalTask(int, char**);
 int ImAliveTask(int, char**);
-
+int tenSecondTicker(int, char**);
 // ***********************************************************************
 // ***********************************************************************
 // project2 command
@@ -54,6 +57,12 @@ int P2_project2(int argc, char* argv[])
 
 	printf("\nStarting Project 2");
 	SWAP;
+    
+    int i;
+    for(i = 0; i < 9; i++)
+    {
+        createTask("TenSeconds", tenSecondTicker, HIGH_PRIORITY, 0, 0);
+    }
 
 	// start tasks looking for sTask semaphores
 	createTask("signal1",				// task name
@@ -273,3 +282,14 @@ char* myTime(char* svtime)
 	svtime[strlen(svtime)-1] = 0;		// eliminate nl at end
 	return svtime;
 } // end myTime
+
+int tenSecondTicker(int argc, char* argv[])
+{
+    char timecontents[64];
+    while(1)
+    {
+        SEM_WAIT(tics10sec);
+        printf("\nTask[%ld], %s", curTask, myTime(timecontents));
+    }
+}
+

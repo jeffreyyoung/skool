@@ -23,6 +23,7 @@
 #include <assert.h>
 #include "os345.h"
 #include "os345signals.h"
+#include "os345queue.h"
 
 // The 'reset_context' comes from 'main' in os345.c.  Proper shut-down
 // procedure is to long jump to the 'reset_context' passing in the

@@ -160,6 +160,7 @@ int main(int argc, char* argv[])
 	{
 		// check for character / timer interrupts
 		pollInterrupts();
+        
 
 		// schedule highest priority ready task
 		if ((curTask = scheduler()) < 0) continue;

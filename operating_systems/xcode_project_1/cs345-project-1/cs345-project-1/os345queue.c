@@ -12,6 +12,7 @@ PQueue* initQueue(PQueue* pq)
 	pq = (PQueue*)malloc(sizeof(PQueue));	//Changed after causing immense pain in lab 5 
 	//not enough memory :()
 	pq->queue_tasks = 0;
+    //enQ(pq, 0, 0);
 	return pq;
 }
 
