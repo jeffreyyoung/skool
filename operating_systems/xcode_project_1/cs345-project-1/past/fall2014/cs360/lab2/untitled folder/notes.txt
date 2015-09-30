@@ -1,0 +1,54 @@
+pthread_create()
+
+client = accept()
+
+instead of calling handle, push client into queue... make queue class variable make it global, (or do dr zapala's method)
+
+producer thread is main program, main()
+	all producer thread does
+
+put pthread_create right above loop where you have accept
+
+
+
+
+
+pthread_create, creates a new thread
+	
+	in consumer thread, you pop the queue and handleClient()
+
+
+you'll need 4 semaphores
+	first two are simpler ones,
+	mailbox semaphore// 
+						sem_init(1); //init semaphores before you create threads //
+						sem_wait(on message semaphore)
+						//access mailbox map
+						sem_post(on message semaphore)
+
+						queue semaphore //
+						sem_init(1);
+						sem_wait();
+						do shiz to queue
+						sem_post();
+
+						last two semaphores are to protect data
+						//google producer/consumer problem
+						n.sem_init(0); //represents how many
+						before you call pop in consumer thang will wait on semaphore n
+
+						//available threads
+						e
+						fourth semaphore
+						semaphore, 
+						sem_init(numThreads)
+
+
+
+//gotchyas
+
+	change cache class variable and put it inside handle function, give each worker a cache
+
+	echo_server, buff_ - unglobalize it, redeclar as local variable
+
+

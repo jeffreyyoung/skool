@@ -9,6 +9,9 @@
 // Context switching directives
 #define SWAP swapTask();
 
+#include "os345queue.h"
+#include <setjmp.h>
+
 // ***********************************************************************
 // Thread-safe extensions: delete _s if desired
 //#define SPRINTF sprintf_s
@@ -100,6 +103,7 @@ typedef struct							// task control block
 	Semaphore *event;					// blocked task semaphore
 	void* stack;						// task stack
 	jmp_buf context;					// task context pointer
+    int time;
 } TCB;
 
 // Task specific variables
