@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "cs345-project-1/os345.c"
-            timestampString = "465293789.512536"
+            filePath = "cs345-project-1/os345semaphores.c"
+            timestampString = "465338432.777494"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
-            landmarkName = "scheduler()"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "semWait()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

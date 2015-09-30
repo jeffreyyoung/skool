@@ -29,7 +29,7 @@
 #include "os345config.h"
 #include "os345lc3.h"
 #include "os345fat.h"
-#include "os345queue.h"
+#include "PQueue.h"
 
 // **********************************************************************
 //	local prototypes

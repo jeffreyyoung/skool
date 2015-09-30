@@ -27,7 +27,7 @@
 #include "os345.h"
 #include "os345signals.h"
 #include "os345config.h"
-#include "os345queue.h"
+#include "PQueue.h"
 
 
 extern TCB tcb[];							// task control block
@@ -87,9 +87,6 @@ int createTask(char* name,						// task name
 
 			// Each task must have its own stack and stack pointer.
 			tcb[tid].stack = malloc(STACK_SIZE * sizeof(int));
-
-			// ?? may require inserting task into "ready" queue
-            //enqueue task
             enQ(rq, tid, priority);
 
 			if (tid) swapTask();				// do context switch (if not cli)
@@ -111,6 +108,7 @@ int createTask(char* name,						// task name
 static void exitTask(int taskId);
 int killTask(int taskId)
 {
+    printf("\nkilling task: %d", taskId);
 	if (taskId != 0)			// don't terminate shell
 	{
 		if (taskId < 0)			// kill all tasks
@@ -135,12 +133,17 @@ int killTask(int taskId)
 static void exitTask(int taskId)
 {
 	assert("exitTaskError" && tcb[taskId].name);
-
+    
 	// 1. find task in system queue
 	// 2. if blocked, unblock (handle semaphore)
 	// 3. set state to exit
-
-	// ?? add code here
+    deQ(rq, taskId);
+    Semaphore* sem = semaphoreList;
+    while(sem)
+    {
+        deQ(sem->q, taskId);
+        sem = (Semaphore*)sem->semLink;
+    }
 
 	tcb[taskId].state = S_EXIT;			// EXIT task state
 	return;

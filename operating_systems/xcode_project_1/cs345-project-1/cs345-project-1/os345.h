@@ -9,7 +9,7 @@
 // Context switching directives
 #define SWAP swapTask();
 
-#include "os345queue.h"
+#include "PQueue.h"
 #include <setjmp.h>
 
 // ***********************************************************************

@@ -22,7 +22,7 @@
 		7B07F6E81B9E05F500F6A14D /* os345semaphores.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B07F6D81B9E05F500F6A14D /* os345semaphores.c */; };
 		7B07F6E91B9E05F500F6A14D /* os345signals.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B07F6D91B9E05F500F6A14D /* os345signals.c */; };
 		7B07F6EA1B9E05F500F6A14D /* os345tasks.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B07F6DB1B9E05F500F6A14D /* os345tasks.c */; };
-		7B0E55A61BBBC6A20007EAA6 /* os345queue.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B0E55A41BBBC6A20007EAA6 /* os345queue.c */; };
+		7B0E55AC1BBC620F0007EAA6 /* PQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B0E55AA1BBC620F0007EAA6 /* PQueue.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,8 +60,8 @@
 		7B07F6D91B9E05F500F6A14D /* os345signals.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = os345signals.c; sourceTree = "<group>"; };
 		7B07F6DA1B9E05F500F6A14D /* os345signals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = os345signals.h; sourceTree = "<group>"; };
 		7B07F6DB1B9E05F500F6A14D /* os345tasks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = os345tasks.c; sourceTree = "<group>"; };
-		7B0E55A41BBBC6A20007EAA6 /* os345queue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = os345queue.c; sourceTree = "<group>"; };
-		7B0E55A51BBBC6A20007EAA6 /* os345queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = os345queue.h; sourceTree = "<group>"; };
+		7B0E55AA1BBC620F0007EAA6 /* PQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PQueue.c; sourceTree = "<group>"; };
+		7B0E55AB1BBC620F0007EAA6 /* PQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PQueue.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,9 +94,9 @@
 		7B07F6BF1B9E059500F6A14D /* cs345-project-1 */ = {
 			isa = PBXGroup;
 			children = (
+				7B0E55AA1BBC620F0007EAA6 /* PQueue.c */,
+				7B0E55AB1BBC620F0007EAA6 /* PQueue.h */,
 				7B07F6C71B9E05F500F6A14D /* os345.c */,
-				7B0E55A41BBBC6A20007EAA6 /* os345queue.c */,
-				7B0E55A51BBBC6A20007EAA6 /* os345queue.h */,
 				7B07F6C81B9E05F500F6A14D /* os345.h */,
 				7B07F6C91B9E05F500F6A14D /* os345config.h */,
 				7B07F6CA1B9E05F500F6A14D /* os345fat.c */,
@@ -191,7 +191,7 @@
 				7B07F6E01B9E05F500F6A14D /* os345mmu.c in Sources */,
 				7B07F6E91B9E05F500F6A14D /* os345signals.c in Sources */,
 				7B07F6E31B9E05F500F6A14D /* os345p3.c in Sources */,
-				7B0E55A61BBBC6A20007EAA6 /* os345queue.c in Sources */,
+				7B0E55AC1BBC620F0007EAA6 /* PQueue.c in Sources */,
 				7B07F6E61B9E05F500F6A14D /* os345p6.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

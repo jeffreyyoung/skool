@@ -24,7 +24,7 @@
 #include <time.h>
 #include "os345.h"
 #include "os345signals.h"
-#include "os345queue.h"
+#include "PQueue.h"
 
 #define my_printf	printf
 
@@ -92,35 +92,50 @@ int P2_project2(int argc, char* argv[])
 } // end P2_project2
 
 
-
-// ***********************************************************************
-// ***********************************************************************
-// list tasks command
 int P2_listTasks(int argc, char* argv[])
 {
-	int i;
-
-//	?? 1) List all tasks in all queues
-// ?? 2) Show the task stake (new, running, blocked, ready)
-// ?? 3) If blocked, indicate which semaphore
-
-	for (i=0; i<MAX_TASKS; i++)
-	{
-		if (tcb[i].name)
-		{
-			printf("\n%4d/%-4d%20s%4d  ", i, tcb[i].parent,
-		  				tcb[i].name, tcb[i].priority);
-			if (tcb[i].signal & mySIGSTOP) my_printf("Paused");
-			else if (tcb[i].state == S_NEW) my_printf("New");
-			else if (tcb[i].state == S_READY) my_printf("Ready");
-			else if (tcb[i].state == S_RUNNING) my_printf("Running");
-			else if (tcb[i].state == S_BLOCKED) my_printf("Blocked    %s",
-		  				tcb[i].event->name);
-			else if (tcb[i].state == S_EXIT) my_printf("Exiting");
-			swapTask();
-		}
-	}
-	return 0;
+    int i,j;
+    
+    //	?? 1) List all tasks in all queues
+    // ?? 2) Show the task stake (new, running, blocked, ready)
+    // ?? 3) If blocked, indicate which semaphore
+    
+    //Show the ready queue
+    printf("\nReady Queue");
+    for(i = rq->size -1; i >= 0; i--)
+    {
+        if(tcb[rq->queue[i].tid].name)
+        {
+            printf("\n%4d%20s%4d   ", rq->queue[i].tid,
+                   tcb[rq->queue[i].tid].name, tcb[rq->queue[i].tid].priority);
+            if (tcb[rq->queue[i].tid].signal & mySIGSTOP) my_printf("Paused");
+            else if (tcb[rq->queue[i].tid].state == S_NEW) my_printf("New");
+            else if (tcb[rq->queue[i].tid].state == S_READY) my_printf("Ready");
+            else if (tcb[rq->queue[i].tid].state == S_RUNNING) my_printf("Running");
+            else if (tcb[rq->queue[i].tid].state == S_BLOCKED) my_printf("Blocked    %s", tcb[rq->queue[i].tid].event->name);
+            else if (tcb[rq->queue[i].tid].state == S_EXIT) my_printf("Exiting");
+        }
+    }
+    printf("\n\nBlocked Queue");
+    //show the blocked tasks
+    Semaphore* semindex = semaphoreList; // go through the list of active sems
+    while (semindex) {
+        //printf("\n semaphore: %s", semindex->name);
+        for ( j = semindex->q->size - 1; j >= 0; j--) {
+            printf("\n%4d%20s%4d  ", semindex->q->queue[j].tid,
+                   tcb[semindex->q->queue[j].tid].name, tcb[semindex->q->queue[j].tid].priority);
+            if (tcb[semindex->q->queue[j].tid].signal & mySIGSTOP) my_printf("Paused");
+            else if (tcb[semindex->q->queue[j].tid].state == S_NEW) my_printf("New");
+            else if (tcb[semindex->q->queue[j].tid].state == S_READY) my_printf("Ready");
+            else if (tcb[semindex->q->queue[j].tid].state == S_RUNNING) my_printf("Running");
+            else if (tcb[semindex->q->queue[j].tid].state == S_BLOCKED) my_printf("Blocked    %s", tcb[semindex->q->queue[j].tid].event->name);
+            else if (tcb[semindex->q->queue[j].tid].state == S_EXIT) my_printf("Exiting");
+        }
+        semindex = semindex->semLink;
+    }
+    
+    
+    return 0;
 } // end P2_listTasks
 
 

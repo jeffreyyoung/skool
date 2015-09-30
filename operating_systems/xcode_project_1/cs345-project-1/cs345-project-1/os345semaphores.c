@@ -88,8 +88,6 @@ void semSignal(Semaphore* s)
         {
             tcb[top.tid].event = 0; //clear event pointer
             tcb[top.tid].state = S_READY; //unblock task
-            //printf("\n$Adding to RQ %ld\n", top.tid);
-            
             enQ(rq, top.tid, top.priority); //
         }
         
@@ -155,15 +153,14 @@ int semWait(Semaphore* s)
         if((s->state) < 1) //if there are things in the blocked queue
         {
             task top;
-            top = deQ(rq, curTask);
+            top = deQpop(rq);
             tcb[top.tid].event = s;
             tcb[top.tid].state = S_BLOCKED; //blocking of task
-            
             if(top.tid != -1)
             {
-                //printf("*Adding %d to Blocked Q\n", curTask);
                 enQ(s->q, curTask, top.priority);
                 s->state--;
+
             }
             swapTask();
             return 1;

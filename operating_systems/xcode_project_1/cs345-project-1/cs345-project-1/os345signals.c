@@ -36,12 +36,14 @@ extern int curTask;							// current task #
 //
 int signals(void)
 {
+    int returnValue = 0;
 	if (tcb[curTask].signal)
 	{
 		if (tcb[curTask].signal & mySIGINT)
 		{
 			tcb[curTask].signal &= ~mySIGINT;
 			(*tcb[curTask].sigIntHandler)();
+            returnValue = 1;
 		}
         
         if(tcb[curTask].signal & mySIGTSTP)
@@ -69,7 +71,7 @@ int signals(void)
         }
         
 	}
-	return 0;
+	return returnValue;
 }
 
 
