@@ -58,7 +58,6 @@ void semSignal(Semaphore* s)
         if(top.tid != -1)
         {
             // ?? move task from blocked to ready queue
-            //printf("\n*Added to RQ %ld", top.tid);
             enQ(rq, top.tid, top.priority);
             s->state = 0;				// clear semaphore
             tcb[top.tid].event = 0;			// clear event pointer
@@ -77,13 +76,8 @@ void semSignal(Semaphore* s)
     }
     else
     {
-        // counting semaphore
-        // ?? implement counting semaphore
-        if(curTask == -1 && s->state < -1) return; //if your curTask isn't assig, and things are in the blocked queue
-        
         s->state++;
         task top = deQpop(s->q);
-        
         if(top.tid != -1)
         {
             tcb[top.tid].event = 0; //clear event pointer
@@ -126,7 +120,7 @@ int semWait(Semaphore* s)
             
             // ?? move task from ready queue to blocked queue
             task top;
-            top = deQ(rq, curTask); // take curTask from ready queue to blocked queue
+            top = deQpop(rq); // take curTask from ready queue to blocked queue
             
             if(top.tid != -1) //if the task is valid, enQ it
             {

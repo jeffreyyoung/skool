@@ -39,6 +39,7 @@ extern int curTask;							// current task #
 extern Semaphore* semaphoreList;			// linked list of active semaphores
 extern jmp_buf reset_context;				// context of kernel stack
 extern PQueue* rq;
+extern char inBuffer[];					// character input buffer
 
 // ***********************************************************************
 // project 2 functions and tasks
@@ -185,6 +186,9 @@ int P2_listSems(int argc, char* argv[])				// listSemaphores
 // reset system
 int P2_reset(int argc, char* argv[])						// reset
 {
+    int i;
+    for (i=0; i<INBUF_SIZE; i++) inBuffer[i] = 0;
+    
 	longjmp(reset_context, POWER_DOWN_RESTART);
 	// not necessary as longjmp doesn't return
 	return 0;
@@ -231,7 +235,11 @@ void sem_signal(Semaphore* sem)		// signal
 // ***********************************************************************
 int P2_signal1(int argc, char* argv[])		// signal1
 {
-	SEM_SIGNAL(s1Sem);
+    if(s1Sem != NULL)
+    {
+        	SEM_SIGNAL(s1Sem);
+    }
+
 	return 0;
 } // end signal
 

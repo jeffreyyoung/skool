@@ -41,6 +41,14 @@ task enQ(PQueue* pq, int t_id, int prior)
     to_add.priority = prior;
     to_add.time_added = pq->elements_added;
     
+    for(int i = 0; i < pq->size; i++)
+    {
+        if (pq->queue[i].tid == t_id)
+        {
+            return to_add;
+        }
+    }
+    
     pq->queue[pq->size] = to_add;
     pq->size++;
     sortQ(pq);
@@ -103,6 +111,6 @@ void printPQ(PQueue* pq)
     for(i; i < pq->size; i++)
     {
         task t = pq->queue[i];
-       // printf("\nPQ[%d] : tid: %d    priority: %d ", i,t.tid, t.priority);
+        printf("\nPQ[%d] : tid: %d    priority: %d ", i,t.tid, t.priority);
     }
 }

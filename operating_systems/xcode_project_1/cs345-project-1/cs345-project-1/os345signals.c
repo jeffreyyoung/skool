@@ -43,7 +43,6 @@ int signals(void)
 		{
 			tcb[curTask].signal &= ~mySIGINT;
 			(*tcb[curTask].sigIntHandler)();
-            returnValue = 1;
 		}
         
         if(tcb[curTask].signal & mySIGTSTP)
@@ -68,6 +67,7 @@ int signals(void)
         {
             tcb[curTask].signal &= ~mySIGTERM;
             (*tcb[curTask].sigTermHandler)();
+            returnValue = 1;
         }
         
 	}

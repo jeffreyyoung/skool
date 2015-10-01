@@ -141,15 +141,17 @@ static void exitTask(int taskId)
     Semaphore* sem = semaphoreList;
     while(sem)
     {
-        deQ(sem->q, taskId);
+        task t = deQ(sem->q, taskId);
+        if (t.tid != -1 && tcb[t.tid].event->type == 1) //if valid task and counting semaphore
+        {
+            tcb[t.tid].event->state++;
+        }
         sem = (Semaphore*)sem->semLink;
     }
 
 	tcb[taskId].state = S_EXIT;			// EXIT task state
 	return;
 } // end exitTask
-
-
 
 // **********************************************************************
 // system kill task

@@ -46,6 +46,7 @@ extern Semaphore* inBufferReady;			// input buffer ready semaphore
 extern Semaphore* tics1sec;				// 1 second semaphore
 extern Semaphore* tics10thsec;				// 1/10 second semaphore
 extern Semaphore* tics10sec;
+extern PQueue* rq;
 
 extern char inChar;				// last entered character
 extern int charFlag;				// 0 => buffered input
@@ -202,6 +203,7 @@ static void timer_isr()
   	{
 		// signal 1 second
   	   semSignal(tics1sec);
+       // printf("\n semSignaling 1sec!!!\n");
 		oldTime1 += 1;
   	}
 
@@ -217,6 +219,8 @@ static void timer_isr()
     {
         semSignal(tics10sec);
         oldTime10 += 10;
+        //printf("---printing semaphore...---\n");
+        //printPQ(tics10sec->q);
     }
 	// ?? add other timer sampling/signaling code here for project 2
 
