@@ -30,6 +30,7 @@
 #include "os345lc3.h"
 #include "os345fat.h"
 #include "PQueue.h"
+#include "DeltaClock.h"
 
 // **********************************************************************
 //	local prototypes
@@ -87,6 +88,8 @@ time_t oldTime10;
 clock_t myClkTime;
 clock_t myOldClkTime;
 PQueue* rq;							// ready priority queue
+DeltaClock* deltaClock;
+Semaphore* deltaClockMutex;
 
 
 // **********************************************************************
@@ -101,6 +104,7 @@ PQueue* rq;							// ready priority queue
 //
 int main(int argc, char* argv[])
 {
+    
 	// save context for restart (a system reset would return here...)
 	int resetCode = setjmp(reset_context);
 	superMode = TRUE;						// supervisor mode
@@ -139,7 +143,8 @@ int main(int argc, char* argv[])
 	tics1sec = createSemaphore("tics1sec", COUNTING, 0);
 	tics10thsec = createSemaphore("tics10thsec", COUNTING, 0);
     tics10sec = createSemaphore("tics10sec", COUNTING, 0);
-	//?? ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    deltaClockMutex = createSemaphore("deltaClockMutex", BINARY, 1);
+    //?? ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	// schedule CLI task
 	createTask("myShell",			// task name
@@ -363,6 +368,7 @@ static int initOS()
 
 	// malloc ready queue
     rq = initQueue(rq);
+    deltaClock = initDeltaClock();
 
 	// capture current time
 	lastPollClock = clock();			// last pollClock

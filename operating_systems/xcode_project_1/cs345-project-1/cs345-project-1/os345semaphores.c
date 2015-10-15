@@ -101,10 +101,10 @@ void semSignal(Semaphore* s)
 //
 int semWait(Semaphore* s)
 {
-    //assert("semWait Error" && s);												// assert semaphore
+    assert("semWait Error" && s);												// assert semaphore
     assert("semWait Error" && ((s->type == 0) || (s->type == 1)));	// assert legal type
     assert("semWait Error" && !superMode);								// assert user mode
-    
+
     // check semaphore type
     //printf("SEM : %s  %d %d\n", s->name,s->state, s->type);
     

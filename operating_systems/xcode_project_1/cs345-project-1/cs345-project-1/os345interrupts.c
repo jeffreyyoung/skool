@@ -27,6 +27,7 @@
 #include "os345.h"
 #include "os345config.h"
 #include "os345signals.h"
+#include "DeltaClock.h"
 
 // **********************************************************************
 //	local prototypes
@@ -213,6 +214,7 @@ static void timer_isr()
 	{
 		myOldClkTime = myOldClkTime + ONE_TENTH_SEC;   // update old
 		semSignal(tics10thsec);
+        tickDeltaClock();
 	}
 
     if((currentTime - oldTime10) >= 10)

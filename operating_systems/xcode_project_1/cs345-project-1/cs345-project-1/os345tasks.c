@@ -49,7 +49,7 @@ int createTask(char* name,						// task name
 					char* argv[])				// task argument pointers
 {
 	int tid;
-
+    printf("creating task!");
 	// find an open tcb entry slot
 	for (tid = 0; tid < MAX_TASKS; tid++)
 	{

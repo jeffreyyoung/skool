@@ -23,6 +23,7 @@
 		7B07F6E91B9E05F500F6A14D /* os345signals.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B07F6D91B9E05F500F6A14D /* os345signals.c */; };
 		7B07F6EA1B9E05F500F6A14D /* os345tasks.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B07F6DB1B9E05F500F6A14D /* os345tasks.c */; };
 		7B0E55AC1BBC620F0007EAA6 /* PQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B0E55AA1BBC620F0007EAA6 /* PQueue.c */; };
+		7B7F0E191BCF2020001566AF /* DeltaClock.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B7F0E171BCF2020001566AF /* DeltaClock.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -62,6 +63,8 @@
 		7B07F6DB1B9E05F500F6A14D /* os345tasks.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = os345tasks.c; sourceTree = "<group>"; };
 		7B0E55AA1BBC620F0007EAA6 /* PQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = PQueue.c; sourceTree = "<group>"; };
 		7B0E55AB1BBC620F0007EAA6 /* PQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PQueue.h; sourceTree = "<group>"; };
+		7B7F0E171BCF2020001566AF /* DeltaClock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = DeltaClock.c; sourceTree = "<group>"; };
+		7B7F0E181BCF2020001566AF /* DeltaClock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeltaClock.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +97,7 @@
 		7B07F6BF1B9E059500F6A14D /* cs345-project-1 */ = {
 			isa = PBXGroup;
 			children = (
-				7B0E55AA1BBC620F0007EAA6 /* PQueue.c */,
-				7B0E55AB1BBC620F0007EAA6 /* PQueue.h */,
+				7B7F0E151BCF1F8D001566AF /* utils */,
 				7B07F6C71B9E05F500F6A14D /* os345.c */,
 				7B07F6C81B9E05F500F6A14D /* os345.h */,
 				7B07F6C91B9E05F500F6A14D /* os345config.h */,
@@ -105,12 +107,7 @@
 				7B07F6CD1B9E05F500F6A14D /* os345lc3.c */,
 				7B07F6CE1B9E05F500F6A14D /* os345lc3.h */,
 				7B07F6CF1B9E05F500F6A14D /* os345mmu.c */,
-				7B07F6D01B9E05F500F6A14D /* os345p1.c */,
-				7B07F6D11B9E05F500F6A14D /* os345p2.c */,
-				7B07F6D21B9E05F500F6A14D /* os345p3.c */,
-				7B07F6D31B9E05F500F6A14D /* os345p4.c */,
-				7B07F6D41B9E05F500F6A14D /* os345p5.c */,
-				7B07F6D51B9E05F500F6A14D /* os345p6.c */,
+				7B7F0E161BCF1FB4001566AF /* project files */,
 				7B07F6D61B9E05F500F6A14D /* os345park.c */,
 				7B07F6D71B9E05F500F6A14D /* os345park.h */,
 				7B07F6D81B9E05F500F6A14D /* os345semaphores.c */,
@@ -119,6 +116,30 @@
 				7B07F6DB1B9E05F500F6A14D /* os345tasks.c */,
 			);
 			path = "cs345-project-1";
+			sourceTree = "<group>";
+		};
+		7B7F0E151BCF1F8D001566AF /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				7B7F0E171BCF2020001566AF /* DeltaClock.c */,
+				7B7F0E181BCF2020001566AF /* DeltaClock.h */,
+				7B0E55AA1BBC620F0007EAA6 /* PQueue.c */,
+				7B0E55AB1BBC620F0007EAA6 /* PQueue.h */,
+			);
+			name = utils;
+			sourceTree = "<group>";
+		};
+		7B7F0E161BCF1FB4001566AF /* project files */ = {
+			isa = PBXGroup;
+			children = (
+				7B07F6D01B9E05F500F6A14D /* os345p1.c */,
+				7B07F6D11B9E05F500F6A14D /* os345p2.c */,
+				7B07F6D21B9E05F500F6A14D /* os345p3.c */,
+				7B07F6D31B9E05F500F6A14D /* os345p4.c */,
+				7B07F6D41B9E05F500F6A14D /* os345p5.c */,
+				7B07F6D51B9E05F500F6A14D /* os345p6.c */,
+			);
+			name = "project files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -187,6 +208,7 @@
 				7B07F6E71B9E05F500F6A14D /* os345park.c in Sources */,
 				7B07F6E41B9E05F500F6A14D /* os345p4.c in Sources */,
 				7B07F6DD1B9E05F500F6A14D /* os345fat.c in Sources */,
+				7B7F0E191BCF2020001566AF /* DeltaClock.c in Sources */,
 				7B07F6DC1B9E05F500F6A14D /* os345.c in Sources */,
 				7B07F6E01B9E05F500F6A14D /* os345mmu.c in Sources */,
 				7B07F6E91B9E05F500F6A14D /* os345signals.c in Sources */,

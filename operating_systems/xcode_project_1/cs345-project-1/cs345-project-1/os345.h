@@ -174,6 +174,10 @@ int P2_signal2(int, char**);
 
 int P3_project3(int, char**);
 int P3_dc(int, char**);
+int P3_visitor(int, char**);
+int P3_car(int, char**);
+int P3_driver(int, char**);
+
 
 int P4_project4(int, char**);
 int P4_dumpFrame(int, char**);
