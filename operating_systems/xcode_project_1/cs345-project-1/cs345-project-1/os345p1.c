@@ -238,7 +238,6 @@ int P1_shellTask(int argc, char* argv[])
             }
             newArgv = (char**)malloc(sizeof(char*) * newArgc);
             //malloc
-            int i;
             for (i = 0; i < newArgc; i++)
             {
                 newArgv[i] = malloc((strlen(myArgv[i])));
