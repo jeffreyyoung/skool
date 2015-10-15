@@ -91,7 +91,8 @@ void mySigTstpHandler()
 
 bool indexOfQuotation(char* s)
 {
-    for(int i = 0; i < strlen(s); i++)
+    int i;
+    for(i = 0; i < strlen(s); i++)
     {
         if (s[i] == '"')
         {
@@ -237,7 +238,8 @@ int P1_shellTask(int argc, char* argv[])
             }
             newArgv = (char**)malloc(sizeof(char*) * newArgc);
             //malloc
-            for (int i = 0; i < newArgc; i++)
+            int i;
+            for (i = 0; i < newArgc; i++)
             {
                 newArgv[i] = malloc((strlen(myArgv[i])));
                 strcpy(newArgv[i], myArgv[i]);
@@ -333,7 +335,8 @@ int P1_quit(int argc, char* argv[])
 //
 int P1_args(int argc, char* argv[])
 {
-    for (int i = 0; i < argc; i++)
+    int i;
+    for (i = 0; i < argc; i++)
     {
         printf("    \n%s", argv[i]);
     }
@@ -348,8 +351,8 @@ int P1_args(int argc, char* argv[])
 int P1_add(int argc, char* argv[])
 {
     int sum = 0;
-    
-    for (int i = 0; i < argc; i++)
+    int i;
+    for (i = 0; i < argc; i++)
     {
         int number = 0;
         

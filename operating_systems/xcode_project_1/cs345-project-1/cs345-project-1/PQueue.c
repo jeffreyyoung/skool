@@ -12,9 +12,11 @@ PQueue* initQueue(PQueue* pq)
 
 void sortQ(PQueue* pq)
 {
-    for(int i = 0; i < pq->size; i++)
+    int i;
+    for(i = 0; i < pq->size; i++)
     {
-        for (int j = i + 1; j < pq->size; j++)
+        int j;
+        for (j = i + 1; j < pq->size; j++)
         {
             if (pq->queue[i].priority > pq->queue[j].priority)
             {
@@ -40,8 +42,8 @@ task enQ(PQueue* pq, int t_id, int prior)
     to_add.tid = t_id;
     to_add.priority = prior;
     to_add.time_added = pq->elements_added;
-    
-    for(int i = 0; i < pq->size; i++)
+    int i;
+    for(i = 0; i < pq->size; i++)
     {
         if (pq->queue[i].tid == t_id)
         {
