@@ -1,5 +1,5 @@
 import sys
-
+import Contigs from ContigsGenerator
 kmers = []
 with open( sys.argv[ 1 ] ) as fh:
     for line in fh:
